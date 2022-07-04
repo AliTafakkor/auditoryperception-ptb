@@ -322,7 +322,7 @@ try
                 
                 audioname = [pwd audio(ID).name(2:end)];
                 % Play the sound and send trigger for 1s
-                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,videoID,1000);
+                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
                 
                 explog(i).eventStartTime = t + loadtime;
                 explog(i).response = response;
