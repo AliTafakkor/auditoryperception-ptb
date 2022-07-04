@@ -1,7 +1,7 @@
 sca;
 clear;clc;
 
-addpath('Functions');
+addpath('utils');
 
 % Skip synchronization checks
 %Screen('Preference', 'SkipSyncTests', 1);
@@ -21,8 +21,7 @@ p.text_font = 'Arial';
 experiment_info;
 
 % Get subject name
-exp.subjID = input('Name of subject: ','s');
-%exp.run = input('Run number: ');
+exp.subjID = input('Name of subject: ', 's');
 
 
 % Setup key mapping:
