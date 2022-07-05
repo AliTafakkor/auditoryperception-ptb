@@ -1,7 +1,7 @@
-sca;
-clear;clc;
+sca; clear; clc;
 
-addpath('Functions');
+% Add path to utility functions
+addpath('utils');
 
 % Skip synchronization checks
 %Screen('Preference', 'SkipSyncTests', 1);
@@ -18,48 +18,32 @@ p.text_size = 30;
 p.text_font = 'Arial';
 
 % Set experimental infotmation
-experiment_info;
+exp.name = 'Stimuli_Familiarization';
+exp.numStim = 80;
+exp.numCategory = 4;
+exp.timPerStim = 1;
 
 % Get subject name
-exp.subjID = input('Name of subject: ','s');
-%exp.run = input('Run number: ');
-
+exp.subjID = input('Name of subject: ', 's');
 
 % Setup key mapping:
+p.nextKey = KbName('RIGHTARROW');
+p.previousKey = KbName('LEFTARROW');
+p.repeatKey = KbName('DOWNARROW');
 p.escapeKey = KbName('ESCAPE');
 p.spaceKey = KbName('SPACE');
-p.triggerKey = KbName('t');
 p.pressKey = p.spaceKey;
 
-% Detect StimTracker
-device = detect_StimTracker();
-
-% Set trigger number for start and end of a trial, button press
-% Or better number?
-runStart = 100;
-runEnd = 110;
-press = 128; % binary:1000,0000. using only 8th bit to avoid overlap
-
-% Load audio device
-InitializePsychSound;
-p.pahandle = PsychPortAudio('Open', [], [], 0, 48000, 2);
-
-% Load silent audio to buffer
-sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
-sound_play(p.pahandle);
-
-
 % Load audio files
-folder = fullfile('.', 'stimuli');
-categories = ["animals", "objects", "scenes", "people"];
+stimuli_folder = fullfile('.', 'stimuli');
+categories = ["animals", "objects", "people", "scenes"];
 
 ite = 1;
-for c = 1:length(categories)
-    category = categories(c);
-    files = dir(fullfile(folder, category, '*.mp3'));
+for category = categories
+    files = dir(fullfile(stimuli_folder, category, '*.mp3'));
     for i=1:size(files,1)
         audio(ite).audioNameShort = files(i).name(1:end-4);
-        files(i).name = char(fullfile(folder, category, files(i).name));
+        files(i).name = char(fullfile(stimuli_folder, category, files(i).name));
         audio(ite).ID = ite;
         audio(ite).name = files(i).name;
         
@@ -78,10 +62,21 @@ exp.stim = audio;
 
 
 exp.date = nowstring;
-save_path = fullfile('.', 'results', exp.subjID);
-mkdir(save_path);
-save_file_name = [save_path filesep exp.name '_auditory_perception_task_EEG_' exp.subjID '_' exp.date '.mat'];
+save_path = fullfile('..', 'results', exp.subjID);
 
+if ~isfolder(save_path)
+    mkdir(save_path);
+end 
+
+save_file_name = fullfile(save_path, sprintf('%s_%s_%s.mat', exp.name, exp.subjID, exp.date));
+
+% Load audio device
+InitializePsychSound;
+p.pahandle = PsychPortAudio('Open', [], [], 0, 48000, 2);
+
+% Load silent audio to buffer
+sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
+sound_play(p.pahandle);
 
 try
     
