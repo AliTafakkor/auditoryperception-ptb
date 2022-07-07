@@ -34,7 +34,8 @@ p.escapeKey = KbName('ESCAPE');
 p.spaceKey = KbName('SPACE');
 p.pressKey = p.spaceKey;
 
-% Load audio files
+% Load audio files and descriptions
+
 stimuli_folder = fullfile('.', 'stimuli');
 categories = ["animals", "objects", "people", "scenes"];
 
@@ -137,7 +138,9 @@ sound_play(p.pahandle);
     % Wait for button press
     KbWait([], 2);
     
-    randind = randperm(81);
+    % Familiarization
+    %randind = randperm(81);
+    randind = 1:81;
     n = 1;
     while (true)
         ID = randind(n);
@@ -154,16 +157,18 @@ sound_play(p.pahandle);
         % Control buttons
         WaitSecs(1); 
         KbWait([], 2);
+        [keyIsDown, ~, keyCode] = KbCheck(-1);
         if (keyIsDown==1 && keyCode(p.nextKey))
             n = n + 1;
+            continue;
         elseif (keyIsDown==1 && keyCode(p.previousKey))
             n = n - 1;
+            continue;
         elseif (keyIsDown==1 && keyCode(p.repeatKey))
             continue;
-        else
+        elseif (keyIsDown==1 && keyCode(p.escapeKey))
             break;
         end
-        %[response, loadtime, wholetime] = only_audio_display_EEG(p, audioname, device, ID, 1000);
     end
 
     % Close audio port
