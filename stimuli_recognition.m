@@ -1,4 +1,4 @@
-sca; clear; clc;
+sca; clearvars -except subjectID; clc;
 
 % Add path to utility functions
 addpath('utils');
@@ -26,16 +26,17 @@ exp.numCategory = 4;
 exp.timPerStim = 1;
 exp.validRespTime = 2;
 exp.ITI = 1;
+exp.minRunBreak = 5;
 
-
-% Get subject name
-exp.subjID = input('Name of subject: ', 's');
+% Get subject ID
+%subjectID = input('Enter subject ID: ', 's');
+exp.subjID = subjectID;
 
 % Setup key mapping:
-p.catKey1 = KbName('1!');
-p.catKey2 = KbName('2@');
-p.catKey3 = KbName('3#');
-p.catKey4 = KbName('4$');
+p.catKey1 = KbName('F');
+p.catKey2 = KbName('G');
+p.catKey3 = KbName('H');
+p.catKey4 = KbName('J');
 p.repeatKey = KbName('DOWNARROW');
 p.escapeKey = KbName('ESCAPE');
 p.spaceKey = KbName('SPACE');
@@ -47,7 +48,7 @@ stimuli_folder = fullfile('.', 'stimuli');
 categories = ["animals", "objects", "people", "scenes"];
 ite = 1;
 
-fileID = fopen(fullfile(stimuli_folder,'description.txt'),'r');
+fileID = fopen(fullfile(stimuli_folder, 'description.txt'),'r');
 for category = categories
     files = dir(fullfile(stimuli_folder, category, '*.mp3'));
     for i=1:size(files,1)
@@ -93,6 +94,8 @@ try
     p.hpad = p.wRect(3)*0.05;
     p.vpad = p.wRect(4)*0.05;
     p.margin = p.wRect(4)*0.025;
+    p.progbar.frameRect = [p.wRect(3)/3, 2*p.wRect(4)/3, 2*p.wRect(3)/3, 2*p.wRect(4)/3+p.wRect(4)*0.04];
+    p.progbar.fillRect = p.progbar.frameRect + [3, 3, -3, -3];
 
     Screen('BlendFunction', p.whandle, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     Screen('TextSize', p.whandle, p.text_size);
@@ -125,18 +128,18 @@ try
     str = 'You should indicate the category by pressing numbers 1 to 4 corresponding to:';
     drawAlignedText(p, str, 0, 4, 't', 'l')
 
-    str = '1: Animal';
+    str = 'F: Animal';
     drawAlignedText(p, str, 0, 6, 't', 'l')
-    str = '2: Object';
+    str = 'G: Object';
     drawAlignedText(p, str, 10, 6, 't', 'l')
-    str = '3: People';
+    str = 'H: People';
     drawAlignedText(p, str, 0, 7, 't', 'l')
-    str = '4: Scene';
+    str = 'J: Scene';
     drawAlignedText(p, str, 0, 9, 't', 'l')
 
     str = sprintf('You will complete %d runs, you can rest between runs.', exp.numRuns);
     drawAlignedText(p, str, 0, 12, 't', 'l')
-    str = 'Press any key to start.';
+    str = 'Get ready and press any key to start.';
     drawAlignedText(p, str, 0, 13, 't', 'l')
 
     Screen('Flip', p.whandle);
@@ -148,12 +151,14 @@ try
     quitFlag = false;
     % Imageability task
     for r = 1:exp.numRuns
+        rng('shuffle');
         randind = randperm(exp.numStim);
 
         run.runNumber = r;
         run.stimOrder = randind;
         run.responses = NaN(1,exp.numStim);
         run.trialTimes = NaN(1,exp.numStim);
+        run.RT = NaN(1,exp.numStim); % reaction time
 
         for n = 1:exp.numStim
             % Inter Trial Interval
@@ -161,46 +166,49 @@ try
 
             ID = randind(n);
             audioname = [pwd audio(ID).name(2:end)];
-    
-            tic;
 
             % Load and Play the sound
             sound_load(audioname,p.pahandle);
+            tic;
             sound_play(p.pahandle);
+           
             
-            % Show guide
-            str = 'What category this sound belongs to?';
-            drawAlignedText(p, str, 0, 4, 'c', 'c')
-
-            str = '1: Animal';
-            drawAlignedText(p, str, 0, 6, 't', 'c')
-            str = '2: Object';
-            drawAlignedText(p, str, 10, 6, 't', 'c')
-            str = '3: People';
-            drawAlignedText(p, str, 0, 7, 't', 'c')
-            str = '4: Scene';
-            drawAlignedText(p, str, 0, 9, 't', 'c')
-            
-            Screen('Flip', p.whandle);
-            
-            % Control buttons
             while (toc < exp.validRespTime)
+                
+                % Show guide
+                str = 'What category this sound belongs to?';
+                drawAlignedText(p, str, 0, 5, 'c', 'c')
+                str = 'Animal (F) - Object (G) - People (H) - Scene (J)';
+                drawAlignedText(p, str, 0, 6, 't', 'c')
+                % Update progress bar
+                etr = toc/exp.validRespTime; % Elapsed Time Ratio
+                x = (p.progbar.fillRect(3)-p.progbar.fillRect(1))*etr;
+                Screen('FrameRect', p.whandle ,[0 0 0] ,p.progbar.frameRect ,2);
+                Screen('FillRect', p.whandle ,[0 255 0] ,p.progbar.fillRect-[0 0 x 0] ,2);
+                % Flip screen
+                Screen('Flip', p.whandle);
+
+                % Control buttons
                 [keyIsDown, ~, keyCode] = KbCheck(-1);
                 if (keyIsDown==1 && keyCode(p.catKey1))
                     run.responses(n) = 1;
+                    run.RT(n) = toc;
                 elseif (keyIsDown==1 && keyCode(p.catKey2))
                     run.responses(n) = 2;
+                    run.RT(n) = toc;
                 elseif (keyIsDown==1 && keyCode(p.catKey3))
                     run.responses(n) = 3;
+                    run.RT(n) = toc;
                 elseif (keyIsDown==1 && keyCode(p.catKey4))
                     run.responses(n) = 4;
+                    run.RT(n) = toc;
                 elseif (keyIsDown==1 && keyCode(p.escapeKey))
                     quitFlag = true;
                 end
             end
             
             % Save trial time
-            run.trialTimes(n) = toc;
+            run.trialTimes(n)
             
             if quitFlag
                 break;
@@ -213,7 +221,16 @@ try
         if quitFlag
             break;
         end
-        WaitSecs(5)
+
+        % Between runs break screen;
+        str = sprintf('You completed %d runs out of %d.', r, exp.numRuns);
+        drawAlignedText(p, str, p.wRect(4)/2, -2, 'c', 'c')
+        str = 'Take a rest then press any key to continue.';
+        drawAlignedText(p, str, p.wRect(4)/2, 0, 'c', 'c')
+        Screen('Flip', p.whandle);
+
+        WaitSecs(exp.minRunBreak)
+        KbWait([], 2);
     end
 
     % End screen
