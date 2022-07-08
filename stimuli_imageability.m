@@ -1,4 +1,4 @@
-sca; clear; clc;
+sca; clearvars -except subjectID; clc;
 
 % Add path to utility functions
 addpath('utils');
@@ -24,8 +24,9 @@ exp.numStim = 80;
 exp.numCategory = 4;
 exp.timPerStim = 1;
 
-% Get subject name
-exp.subjID = input('Name of subject: ', 's');
+% Get subject ID
+%subjectID = input('Enter subject ID: ', 's');
+exp.subjID = subjectID;
 
 % Setup key mapping:
 p.scoreKey1 = KbName('1!');
