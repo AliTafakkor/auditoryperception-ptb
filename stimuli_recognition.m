@@ -1,4 +1,4 @@
-sca; clearvars -except subjectID; clc;
+sca; clearvars -except subjectID;
 
 % Add path to utility functions
 addpath('utils');
