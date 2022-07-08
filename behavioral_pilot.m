@@ -1,3 +1,5 @@
+sca; clear; clc;
+
 % Get subjectID
 subjectID = input('Enter subject ID: ', 's');
 
