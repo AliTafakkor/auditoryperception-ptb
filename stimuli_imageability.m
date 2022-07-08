@@ -146,6 +146,7 @@ try
     KbWait([], 2);
     
     % Imageability task
+    rng('shuffle');
     randind = randperm(exp.numStim);
     exp.stimOrder = randind;
     exp.responses = NaN(1,exp.numStim);

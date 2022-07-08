@@ -144,6 +144,7 @@ try
     KbWait([], 2);
     
     % Familiarization
+    rng('shuffle');
     randind = randperm(exp.numStim);
     n = 1;
     while (true)
