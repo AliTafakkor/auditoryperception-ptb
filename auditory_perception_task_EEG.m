@@ -41,7 +41,7 @@ press = 128; % binary:1000,0000. using only 8th bit to avoid overlap
 
 % Load audio device
 InitializePsychSound;
-p.pahandle = PsychPortAudio('Open', [], [], 0, 48000, 2);
+p.pahandle = PsychPortAudio('Open', getSoundCardID(), [], 0, 48000, 2);
 
 % Load silent audio to buffer
 sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
@@ -77,7 +77,7 @@ exp.stim = audio;
 
 
 exp.date = nowstring;
-save_path = fullfile('.', 'results', exp.subjID);
+save_path = fullfile('..', 'results', exp.subjID);
 mkdir(save_path);
 save_file_name = [save_path filesep exp.name '_auditory_perception_task_EEG_' exp.subjID '_' exp.date '.mat'];
 
@@ -163,6 +163,7 @@ try
         run.startTime = GetSecs; %This becomes time zero
         
         % Start run
+        rng('shuffle');
         trials = randperm(80); % randomize the audio diplay order
         
         % Send trigger at the begining of each run, duration is 10 ms
@@ -210,12 +211,12 @@ try
             
             if play_oddball(n) == 1
                 audioname = [pwd oddball(2:end)];
-                
-                explog(i).ID = 81;
+                ID = 81;
+                explog(i).ID = ID;
                 explog(i).name = oddball;
                 explog(i).audioNameShort = 'oddball';
                 
-                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,81,1000);
+                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
                 explog(i).eventStartTime = t + loadtime;
                 
                 tic;
@@ -294,6 +295,7 @@ try
             run.startTime = GetSecs; %This becomes time zero
             
             % Start run
+            rng('shuffle');
             trials = randperm(80); % randomize the video diplay order
             
             % Send trigger at the begining of each run, duration is 10 ms
@@ -313,7 +315,7 @@ try
                 ID = trials(n);
                 
                 explog(i).eventStartTime = t;
-                explog(i).eventLabel = getLabel(videoID);
+                explog(i).eventLabel = getLabel(ID);
                 explog(i).ID = ID;
                 explog(i).response = NaN;
                 explog(i).name = audio(ID).name;
@@ -339,11 +341,13 @@ try
                 
                 
                 if play_oddball(n) == 1
+                    ID = 81;
                     audioname = [pwd oddball_sound(2:end)];
                     explog(i).name = oddball;
                     explog(i).audioNameShort = 'oddball';
+                    explog(i).ID = ID;
                     
-                    [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,videoID,1000);
+                    [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
                     explog(i).eventStartTime = t + loadtime;
                     
                     tic;
@@ -362,7 +366,6 @@ try
                     
                     i = i + 1;
                 end
-                
                 
                 
             end
@@ -384,6 +387,10 @@ try
         
         
     end
+
+    % Close audio port
+    PsychPortAudio('Close', p.pahandle);
+
     % Show cursor again:
     ShowCursor(p.whandle);
     
@@ -394,6 +401,7 @@ catch
     % Save exp and run information
     save(save_file_name, 'exp', 'run');
     % Error handling: Close all p.whandledows and movies, release all ressources.
+    PsychPortAudio('Close', p.pahandle);
     sca;
     rethrow(lasterror);
     
