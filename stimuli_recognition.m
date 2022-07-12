@@ -77,7 +77,7 @@ save_file_name = fullfile(save_path, sprintf('%s_%s_%s.mat', exp.name, exp.subjI
 
 % Load audio device
 InitializePsychSound;
-p.pahandle = PsychPortAudio('Open', [], [], 0, 48000, 2);
+p.pahandle = PsychPortAudio('Open', getSoundCardID(), [], 0, 48000, 2);
 
 % Load silent audio to buffer
 sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
