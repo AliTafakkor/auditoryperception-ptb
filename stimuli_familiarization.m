@@ -112,7 +112,7 @@ try
     str = 'Thank you!';
     drawAlignedText(p, str, 0, 5, 't', 'c')
 
-    str = 'CNAI lab!';
+    str = 'CNAI lab';
     drawAlignedText(p, str, p.wRect(4), -3, 'c', 'c')
 
     Screen('Flip', p.whandle);

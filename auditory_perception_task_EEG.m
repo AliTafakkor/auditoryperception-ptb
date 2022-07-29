@@ -356,7 +356,7 @@ try
                         
                         Screen('DrawLines',p.whandle,p.fixcross,p.fixwidth,p.fixcolor);
                         Screen('Flip', p.whandle);
-                        % If button press, send trigger for 50 ms using 8th bit
+                        % If button press, send trigger for 10 ms using 8th bit
                         if KbCheck(-1)
                             send_Pulse(device, p.pressTrig, p.triggerLen);
                         end
