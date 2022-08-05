@@ -47,7 +47,7 @@ ite = 1;
 
 fileID = fopen(fullfile(stimuli_folder,'description.txt'),'r');
 for category = categories
-    files = dir(fullfile(stimuli_folder, category, '*.mp3'));
+    files = dir(fullfile(stimuli_folder, category, '*.wav'));
     for i=1:size(files,1)
         audio(ite).audioNameShort = files(i).name(1:end-4);
         files(i).name = char(fullfile(stimuli_folder, category, files(i).name));
