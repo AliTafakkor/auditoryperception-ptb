@@ -180,6 +180,8 @@ try
         % Show guide
         str = 'How easily did this sound bring an image to mind?';
         drawAlignedText(p, str, 0, 4, 'c', 'c')
+        str = '1: Very difficult to visualize';
+        drawAlignedText(p, str, 0, 7, 't', 'c')
         str = '2: Difficult to visualize';
         drawAlignedText(p, str, 0, 8, 't', 'c')
         str = '3: Vaguely visualizable';
