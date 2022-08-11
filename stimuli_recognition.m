@@ -172,8 +172,8 @@ try
             tic;
             sound_play(p.pahandle);
            
-            
-            while (toc < exp.validRespTime)
+            et = toc;
+            while (et < exp.validRespTime)
                 
                 % Show guide
                 str = 'What category this sound belongs to?';
@@ -181,7 +181,7 @@ try
                 str = 'Animal (F) - Object (G) - People (H) - Scene (J)';
                 drawAlignedText(p, str, 0, 6, 't', 'c')
                 % Update progress bar
-                etr = toc/exp.validRespTime; % Elapsed Time Ratio
+                etr = et/exp.validRespTime; % Elapsed Time Ratio
                 x = (p.progbar.fillRect(3)-p.progbar.fillRect(1))*etr;
                 Screen('FrameRect', p.whandle ,[0 0 0] ,p.progbar.frameRect ,2);
                 Screen('FillRect', p.whandle ,[0 255 0] ,p.progbar.fillRect-[0 0 x 0] ,2);
@@ -205,6 +205,8 @@ try
                 elseif (keyIsDown==1 && keyCode(p.escapeKey))
                     quitFlag = true;
                 end
+
+                et = toc;
             end
             
             % Save trial time
