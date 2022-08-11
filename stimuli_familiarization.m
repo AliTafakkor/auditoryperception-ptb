@@ -44,7 +44,7 @@ ite = 1;
 
 fileID = fopen(fullfile(stimuli_folder,'description.txt'),'r');
 for category = categories
-    files = dir(fullfile(stimuli_folder, category, '*.mp3'));
+    files = dir(fullfile(stimuli_folder, category, '*.wav'));
     for i=1:size(files,1)
         audio(ite).audioNameShort = files(i).name(1:end-4);
         files(i).name = char(fullfile(stimuli_folder, category, files(i).name));
@@ -112,7 +112,7 @@ try
     str = 'Thank you!';
     drawAlignedText(p, str, 0, 5, 't', 'c')
 
-    str = 'CNAI lab!';
+    str = 'CNAI lab';
     drawAlignedText(p, str, p.wRect(4), -3, 'c', 'c')
 
     Screen('Flip', p.whandle);

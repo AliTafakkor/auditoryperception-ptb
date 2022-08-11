@@ -35,9 +35,10 @@ device = detect_StimTracker();
 
 % Set trigger number for start and end of a trial, button press
 % Or better number?
-runStart = 100;
-runEnd = 110;
-press = 128; % binary:1000,0000. using only 8th bit to avoid overlap
+p.runStartTrig = 100;
+p.runEndTrig = 110;
+p.pressTrig = 128; % binary:1000,0000. using only 8th bit to avoid overlap
+p.trigLen = 10; % trigger pulse length = 10 ms
 
 % Load audio device
 InitializePsychSound;
@@ -55,7 +56,7 @@ categories = ["animals", "objects", "scenes", "people"];
 ite = 1;
 for c = 1:length(categories)
     category = categories(c);
-    files = dir(fullfile(folder, category, '*.mp3'));
+    files = dir(fullfile(folder, category, '*.wav'));
     for i=1:size(files,1)
         audio(ite).audioNameShort = files(i).name(1:end-4);
         files(i).name = char(fullfile(folder, category, files(i).name));
@@ -167,7 +168,7 @@ try
         trials = randperm(80); % randomize the audio diplay order
         
         % Send trigger at the begining of each run, duration is 10 ms
-        send_Pulse(device, runStart, 10);
+        send_Pulse(device, p.runStartTrig, p.triggerLen);
         
         i = 1; %used for mark each trial event
         
@@ -192,7 +193,7 @@ try
             
             audioname = [pwd audio(ID).name(2:end)];
             % Play the sound and send trigger for 1s
-            [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
+            [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID);
             
             explog(i).eventStartTime = t + loadtime;
             explog(i).response = response;
@@ -216,7 +217,7 @@ try
                 explog(i).name = oddball;
                 explog(i).audioNameShort = 'oddball';
                 
-                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
+                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID);
                 explog(i).eventStartTime = t + loadtime;
                 
                 tic;
@@ -226,7 +227,7 @@ try
                     Screen('Flip', p.whandle);
                     % If button press, send trigger for 50 ms using 8th bit
                     if KbCheck(-1)
-                        send_Pulse(device, 128, 50);
+                        send_Pulse(device, p.pressTrig, p.triggerLen);
                     end
                 end
                 explog(i).response = response;
@@ -241,7 +242,7 @@ try
         end
         
         % Send trigger at the end of each run, duration is 10 ms
-        send_Pulse(device, runEnd,10);
+        send_Pulse(device, p.runEndTrig, p.triggerLen);
         
         % Calculate run accuracy
         resp_ind = find([explog.response] == 1);
@@ -299,7 +300,7 @@ try
             trials = randperm(80); % randomize the video diplay order
             
             % Send trigger at the begining of each run, duration is 10 ms
-            send_Pulse(device, runStart, 10);
+            send_Pulse(device, p.runStartTrig, p.triggerLen);
             
             i = 1; %used for mark each trial event
             
@@ -323,7 +324,7 @@ try
                 
                 audioname = [pwd audio(ID).name(2:end)];
                 % Play the sound and send trigger for 1s
-                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
+                [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID);
                 
                 explog(i).eventStartTime = t + loadtime;
                 explog(i).response = response;
@@ -347,7 +348,7 @@ try
                     explog(i).audioNameShort = 'oddball';
                     explog(i).ID = ID;
                     
-                    [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID,1000);
+                    [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID);
                     explog(i).eventStartTime = t + loadtime;
                     
                     tic;
@@ -355,9 +356,9 @@ try
                         
                         Screen('DrawLines',p.whandle,p.fixcross,p.fixwidth,p.fixcolor);
                         Screen('Flip', p.whandle);
-                        % If button press, send trigger for 50 ms using 8th bit
+                        % If button press, send trigger for 10 ms using 8th bit
                         if KbCheck(-1)
-                            send_Pulse(device, 128, 50);
+                            send_Pulse(device, p.pressTrig, p.triggerLen);
                         end
                     end
                     explog(i).response = response;
@@ -371,7 +372,7 @@ try
             end
             
             % Send trigger at the end of each run, duration is 10 ms
-            send_Pulse(device, runEnd,10);
+            send_Pulse(device, p.runEndTrig, p.triggerLen);
             
             % Calculate run accuracy
             resp_ind = find([explog.response] == 1);

@@ -1,15 +1,14 @@
-function [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,videoID,duration)
-% Display video giving the file name
+function [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,device,ID)
+% Play audio giving the file name
     response = NaN;
     
     tic;
-    
     
     sound_load(audioname,p.pahandle);
 
     loadtime = toc;
     
-    send_Pulse(device, videoID, duration);
+    send_Pulse(device, ID, p.triggerLen);
     sound_play(p.pahandle);
     
     while toc < 1
@@ -24,13 +23,9 @@ function [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,de
             % Set the abort-demo flag.
             error('Quit the experiment!');
         elseif (keyIsDown == 1 && keyCode(p.pressKey))
-            send_Pulse(device, 128, 50);
+            send_Pulse(device, p.pressTrig, p.triggerLen);
             response = 1;
         end
-        % Draw the new texture immediately to screen:
-        
-        
-        
         
     end
 
