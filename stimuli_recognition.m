@@ -125,7 +125,7 @@ try
     str = 'After hearing each sound you will have a short time to identify its category.';
     drawAlignedText(p, str, 0, 2, 't', 'l')
 
-    str = 'You should indicate the category by pressing numbers 1 to 4 corresponding to:';
+    str = 'You should indicate the category by pressing buttons corresponding to:';
     drawAlignedText(p, str, 0, 4, 't', 'l')
 
     str = 'F: Animal';
@@ -223,16 +223,18 @@ try
         if quitFlag
             break;
         end
-
-        % Between runs break screen;
-        str = sprintf('You completed %d runs out of %d.', r, exp.numRuns);
-        drawAlignedText(p, str, p.wRect(4)/2, -2, 'c', 'c')
-        str = 'Take a rest then press any key to continue.';
-        drawAlignedText(p, str, p.wRect(4)/2, 0, 'c', 'c')
-        Screen('Flip', p.whandle);
-
-        WaitSecs(exp.minRunBreak)
-        KbWait([], 2);
+        
+        if r ~= exp.numRuns
+            % Between runs break screen;
+            str = sprintf('You completed %d runs out of %d.', r, exp.numRuns);
+            drawAlignedText(p, str, p.wRect(4)/2, -2, 'c', 'c')
+            str = 'Take a rest then press any key to continue.';
+            drawAlignedText(p, str, p.wRect(4)/2, 0, 'c', 'c')
+            Screen('Flip', p.whandle);
+    
+            WaitSecs(exp.minRunBreak)
+            KbWait([], 2);
+        end
     end
 
     % End screen

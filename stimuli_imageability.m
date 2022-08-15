@@ -136,7 +136,7 @@ try
     str = '5: Very easy to visualize';
     drawAlignedText(p, str, 0, 11, 't', 'l')
 
-    str = 'After rating a sound, next sound will be played when you are r  d5f4 eady.';
+    str = 'After rating a sound, next sound will be played when you are ready.';
     drawAlignedText(p, str, 0, 13, 't', 'l')
     str = 'Press any key to start.';
     drawAlignedText(p, str, 0, 14, 't', 'l')
@@ -181,7 +181,7 @@ try
         str = 'How easily did this sound bring an image to mind?';
         drawAlignedText(p, str, 0, 4, 'c', 'c')
         str = '1: Very difficult to visualize';
-        drawAlignedText(p, str, 0, 7, 't', 'c')
+        drawAlignedText(p, str, 0, 6, 't', 'c')
         str = '2: Difficult to visualize';
         drawAlignedText(p, str, 0, 8, 't', 'c')
         str = '3: Vaguely visualizable';
