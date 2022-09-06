@@ -2,6 +2,7 @@ sca; clear; clc;
 
 % Get subjectID
 subjectID = input('Enter subject ID: ', 's');
+Screen('Preference', 'SkipSyncTests', 1);
 
 % Get session type 
 familiarization = input('Session include familiarization (y/n): ', 's');

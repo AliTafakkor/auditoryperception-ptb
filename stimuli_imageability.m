@@ -153,7 +153,7 @@ try
     exp.responses = NaN(1,exp.numStim);
 
     exitflag = 0;
-    for n = 1:81
+    for n = 1:80
         ID = randind(n);
         audioname = [pwd audio(ID).name(2:end)];
 
