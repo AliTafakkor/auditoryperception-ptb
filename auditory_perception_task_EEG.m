@@ -168,7 +168,7 @@ try
         trials = randperm(80); % randomize the audio diplay order
         
         % Send trigger at the begining of each run, duration is 10 ms
-        send_Pulse(device, p.runStartTrig, p.triggerLen);
+        send_Pulse(device, p.runStartTrig, p.trigLen);
         
         i = 1; %used for mark each trial event
         
@@ -177,6 +177,7 @@ try
         play_oddball = play_oddball(randperm(80));
         clear explog
         for n = 1:80
+
             
             % Play stimuli
             t = GetSecs-run.startTime;
@@ -227,7 +228,7 @@ try
                     Screen('Flip', p.whandle);
                     % If button press, send trigger for 50 ms using 8th bit
                     if KbCheck(-1)
-                        send_Pulse(device, p.pressTrig, p.triggerLen);
+                        send_Pulse(device, p.pressTrig, p.trigLen);
                     end
                 end
                 explog(i).response = response;
@@ -242,7 +243,7 @@ try
         end
         
         % Send trigger at the end of each run, duration is 10 ms
-        send_Pulse(device, p.runEndTrig, p.triggerLen);
+        send_Pulse(device, p.runEndTrig, p.trigLen);
         
         % Calculate run accuracy
         resp_ind = find([explog.response] == 1);
@@ -300,7 +301,7 @@ try
             trials = randperm(80); % randomize the video diplay order
             
             % Send trigger at the begining of each run, duration is 10 ms
-            send_Pulse(device, p.runStartTrig, p.triggerLen);
+            send_Pulse(device, p.runStartTrig, p.trigLen);
             
             i = 1; %used for mark each trial event
             
@@ -358,7 +359,7 @@ try
                         Screen('Flip', p.whandle);
                         % If button press, send trigger for 10 ms using 8th bit
                         if KbCheck(-1)
-                            send_Pulse(device, p.pressTrig, p.triggerLen);
+                            send_Pulse(device, p.pressTrig, p.trigLen);
                         end
                     end
                     explog(i).response = response;
@@ -372,7 +373,7 @@ try
             end
             
             % Send trigger at the end of each run, duration is 10 ms
-            send_Pulse(device, p.runEndTrig, p.triggerLen);
+            send_Pulse(device, p.runEndTrig, p.trigLen);
             
             % Calculate run accuracy
             resp_ind = find([explog.response] == 1);

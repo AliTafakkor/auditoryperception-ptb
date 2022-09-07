@@ -1,6 +1,6 @@
 sca; clearvars -except subjectID;
 
-% Add path to utility functions
+% Add path to utility functions   
 addpath('utils');
 
 % Skip synchronization checks (to test)

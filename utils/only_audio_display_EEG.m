@@ -8,7 +8,7 @@ function [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,de
 
     loadtime = toc;
     
-    send_Pulse(device, ID, p.triggerLen);
+    send_Pulse(device, ID, p.trigLen);
     sound_play(p.pahandle);
     
     while toc < 1
@@ -23,7 +23,7 @@ function [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,de
             % Set the abort-demo flag.
             error('Quit the experiment!');
         elseif (keyIsDown == 1 && keyCode(p.pressKey))
-            send_Pulse(device, p.pressTrig, p.triggerLen);
+            send_Pulse(device, p.pressTrig, p.trigLen);
             response = 1;
         end
         
