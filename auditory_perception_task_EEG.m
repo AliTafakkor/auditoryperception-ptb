@@ -40,9 +40,10 @@ p.runEndTrig = 110;
 p.pressTrig = 128; % binary:1000,0000. using only 8th bit to avoid overlap
 p.trigLen = 10; % trigger pulse length = 10 ms
 
-% Load audio device
+% Load audio device and set volume
 InitializePsychSound;
 p.pahandle = PsychPortAudio('Open', getSoundCardID(), [], 0, 48000, 2);
+PsychPortAudio('Volume', p.pahandle, 0.005);
 
 % Load silent audio to buffer
 sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
@@ -401,7 +402,7 @@ try
     
 catch
     % Save exp and run information
-    save(save_file_name, 'exp', 'run');
+    %save(save_file_name, 'exp', 'run');
     % Error handling: Close all p.whandledows and movies, release all ressources.
     PsychPortAudio('Close', p.pahandle);
     sca;

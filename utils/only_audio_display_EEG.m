@@ -4,7 +4,7 @@ function [response, loadtime, wholetime] = only_audio_display_EEG(p,audioname,de
     
     tic;
     
-    sound_load(audioname,p.pahandle);
+    sound_load(audioname, p.pahandle);
 
     loadtime = toc;
     
