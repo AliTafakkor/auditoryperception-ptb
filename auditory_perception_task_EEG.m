@@ -1,6 +1,8 @@
 sca;
 clear;clc;
 
+%!echo CNAI@WIRB | sudo -S chmod +777 /dev/ttyusb0
+
 addpath('utils');
 
 % Skip synchronization checks
