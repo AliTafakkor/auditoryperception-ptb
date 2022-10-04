@@ -6,7 +6,7 @@ clear;clc;
 addpath('utils');
 
 % Skip synchronization checks
-%Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 1);
 AssertOpenGL;     
 
 % Initialize with unified keynames and normalized colorspace:
@@ -45,7 +45,7 @@ p.trigLen = 10; % trigger pulse length = 10 ms
 % Load audio device and set volume
 InitializePsychSound;
 p.pahandle = PsychPortAudio('Open', getSoundCardID(), [], 0, 48000, 2);
-PsychPortAudio('Volume', p.pahandle, 0.005);
+PsychPortAudio('Volume', p.pahandle, 0.03);
 
 % Load silent audio to buffer
 sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
