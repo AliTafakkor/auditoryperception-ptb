@@ -4,8 +4,9 @@ sca; clearvars -except subjectID;
 addpath('utils');
 
 % Skip synchronization checks (to test)
-%Screen('Preference', 'SkipSyncTests', 1);
 
+ Screen('Preference', 'SkipSyncTests', 1);
+ 
 AssertOpenGL;
 
 % Initialize with unified keynames and normalized colorspace:
@@ -26,7 +27,7 @@ exp.timPerStim = 1;
 
 % Get subject ID
 %subjectID = input('Enter subject ID: ', 's');
-exp.subjID = subjectID;
+exp.subjID =  subjectID;
 
 % Setup key mapping:
 p.nextKey = KbName('RIGHTARROW');
@@ -81,6 +82,7 @@ save_file_name = fullfile(save_path, sprintf('%s_%s_%s.mat', exp.name, exp.subjI
 % Load audio device
 InitializePsychSound;
 p.pahandle = PsychPortAudio('Open', getSoundCardID(), [], 0, 48000, 2);
+PsychPortAudio('Volume', p.pahandle, 0.03);
 
 % Load silent audio to buffer
 sound_load(fullfile('.', 'stimuli', 'silence.wav'), p.pahandle);
