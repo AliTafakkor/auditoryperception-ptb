@@ -127,9 +127,10 @@ try
 
     KbWait([], 2);
 
+    WaitSecs(1);
     
     for r = 1:12  % 12 runs
-        
+
         run.runNumber = r;
         
         % Instructions screen
@@ -155,11 +156,11 @@ try
         % Rest screen
         else
             str = ['You have ' int2str(13-r) ' run(s) left. You can take a short break now (at least 30 seconds).'];
-            drawAlignedText(p, str, 0, 0, 'c', 'l')
+            drawAlignedText(p, str, 0, 4, 't', 'l')
             str = 'When you are ready to start next run, you can press the space key to start.';
-            drawAlignedText(p, str, 0, 1, 'c', 'l')
+            drawAlignedText(p, str, 0, 5, 't', 'l')
             str = 'If you do not press to start, next run will start automatically in 2 minutes.';
-            drawAlignedText(p, str, 0, 4, 'c', 'l')
+            drawAlignedText(p, str, 0, 7, 't', 'l')
             Screen('Flip', p.whandle);
             % Wait for button press
             tic
@@ -275,16 +276,16 @@ try
         
         % Instruction
         str = ['You have finished ' int2str(r-1) ' runs. If you are willing to continue for a next run, you can press space'];
-        drawAlignedText(p, str, 0, 0, 'c', 'l')
+        drawAlignedText(p, str, 0, 4, 't', 'l')
         
         str = 'button to have another run. If not, you can press escape button to end the experiment.';
-        drawAlignedText(p, str, 0, 1, 'c', 'l')
+        drawAlignedText(p, str, 0, 5, 't', 'l')
         
         str = 'We do not require you to do more than 12 runs. But doing more will benefit us, and you will';
-        drawAlignedText(p, str, 0, 2, 'c', 'l')
+        drawAlignedText(p, str, 0, 6, 't', 'l')
         
         str = 'gain more compensations.';
-        drawAlignedText(p, str, 0, 3, 'c', 'l')
+        drawAlignedText(p, str, 0, 7, 't', 'l')
         Screen('Flip', p.whandle);
         
         % Wait for button press
