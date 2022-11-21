@@ -98,6 +98,11 @@ try
     HideCursor(p.whandle);
     
     % Paramters for fixation cross
+    p.xCenter = floor(p.wRect(3)/2);
+    p.yCenter = floor(p.wRect(4)/2);
+    p.hpad = p.wRect(3)*0.05;
+    p.vpad = p.wRect(4)*0.05;
+    p.margin = p.wRect(4)*0.025;
     p.xCenter = p.wRect(3)/2;
     p.yCenter = p.wRect(4)/2;
     fixlinelength = 10;
@@ -105,47 +110,51 @@ try
     p.fixwidth = 2.5;
     p.fixcolor = [1 1 1];
     
+    % Wait Screen
     str = 'Please wait for set up.';
-    Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter-200, [0 0 0]);
+    drawAlignedText(p, str, 0, 2, 't', 'c')
     
-    str = 'You will be told when it is ready to start. Thank you!';
-    Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter, [0 0 0]);
+    str = 'You will be told when it is ready to start.';
+    drawAlignedText(p, str, 0, 3, 't', 'c')
+
+    str = 'Thank you!';
+    drawAlignedText(p, str, 0, 5, 't', 'c')
+
+    str = 'CNAI lab';
+    drawAlignedText(p, str, p.wRect(4), -3, 'c', 'c')
+
     Screen('Flip', p.whandle);
-    % Wait for button press
+
     KbWait([], 2);
+
     
     for r = 1:12  % 12 runs
         
         run.runNumber = r;
         
-        % Instruction text
-        
+        % Instructions screen
         if r == 1 % first run
-            str = 'You will hear a series of sounds. Please imagine the associated visual.';
-            Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter-400, [0 0 0]);
+         
+            str = 'You will hear a series of sounds in each run. Place your finger on the space bar and press the key when you hear a noise sound.';
+            drawAlignedText(p, str, 0, 1, 't', 'l')
             
-            str = 'Always close your eyes when doing this task. Place your finger on the space bar. When you hear a';
-            Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter-200, [0 0 0]);
-            
-            str = 'noise sound, press the key. I will knock the door when one run ends, so you do not need to open ';
-            Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter-100, [0 0 0]);
-            
-            str = 'your eyes to check.';
-            Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter, [0 0 0]);
-            
+            str = 'Please Keep your eyes open during the task and look at the fixation cross.';
+            drawAlignedText(p, str, 0, 3, 't', 'l')
+        
             str = 'There will be 12 runs. Each run will last 4.5 minutes.';
-            %str = ' 2) Always fixate on the center of the screen.';
-            Screen('DrawText', p.whandle, str, p.xCenter-880, p.yCenter+150, [0 0 0]);
-            
-            str = 'Close your eyes and press space key to start';
-            Screen('DrawText', p.whandle, str, p.xCenter-400, p.yCenter+350, [0 0 0]);
+            drawAlignedText(p, str, 0, 5, 't', 'l')
+        
+            str = 'Press any key to start when you are ready.';
+            drawAlignedText(p, str, 0, 10, 't', 'l')
+        
             Screen('Flip', p.whandle);
+        
             % Wait for button press
             KbWait([], 2);
             
         else
             str = ['You have ' int2str(13-r) ' runs left. You can take a short break now.'];
-            Screen('DrawText', p.whandle, str, p.xCenter-850, p.yCenter-200, [0 0 0]);
+            drawAlignedText(p, str, 0, 0, 'c', 'l')
             str = 'When you are ready to start next run, you can press the space key to start.';
             Screen('DrawText', p.whandle, str, p.xCenter-850, p.yCenter-100, [0 0 0]);
             
