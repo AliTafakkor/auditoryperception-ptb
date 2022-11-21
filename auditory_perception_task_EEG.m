@@ -151,15 +151,15 @@ try
         
             % Wait for button press
             KbWait([], 2);
-            
+        
+        % Rest screen
         else
-            str = ['You have ' int2str(13-r) ' runs left. You can take a short break now.'];
+            str = ['You have ' int2str(13-r) ' run(s) left. You can take a short break now (at least 30 seconds).'];
             drawAlignedText(p, str, 0, 0, 'c', 'l')
             str = 'When you are ready to start next run, you can press the space key to start.';
-            Screen('DrawText', p.whandle, str, p.xCenter-850, p.yCenter-100, [0 0 0]);
-            
+            drawAlignedText(p, str, 0, 1, 'c', 'l')
             str = 'If you do not press to start, next run will start automatically in 2 minutes.';
-            Screen('DrawText', p.whandle, str, p.xCenter-850, p.yCenter+50, [0 0 0]);
+            drawAlignedText(p, str, 0, 4, 'c', 'l')
             Screen('Flip', p.whandle);
             % Wait for button press
             tic
@@ -172,6 +172,7 @@ try
         end
         
         WaitSecs(2);
+
         % Start master clock
         run.startTime = GetSecs; %This becomes time zero
         
@@ -189,8 +190,6 @@ try
         play_oddball = play_oddball(randperm(80));
         clear explog
         for n = 1:80
-
-            
             % Play stimuli
             t = GetSecs-run.startTime;
             
@@ -276,16 +275,16 @@ try
         
         % Instruction
         str = ['You have finished ' int2str(r-1) ' runs. If you are willing to continue for a next run, you can press space'];
-        Screen('DrawText', p.whandle, str, p.xCenter-1000, p.yCenter-300, [0 0 0]);
+        drawAlignedText(p, str, 0, 0, 'c', 'l')
         
         str = 'button to have another run. If not, you can press escape button to end the experiment.';
-        Screen('DrawText', p.whandle, str, p.xCenter-1000, p.yCenter-200, [0 0 0]);
+        drawAlignedText(p, str, 0, 1, 'c', 'l')
         
         str = 'We do not require you to do more than 12 runs. But doing more will benefit us, and you will';
-        Screen('DrawText', p.whandle, str, p.xCenter-1000, p.yCenter, [0 0 0]);
+        drawAlignedText(p, str, 0, 2, 'c', 'l')
         
         str = 'gain more compensations.';
-        Screen('DrawText', p.whandle, str, p.xCenter-1000, p.yCenter+100, [0 0 0]);
+        drawAlignedText(p, str, 0, 3, 'c', 'l')
         Screen('Flip', p.whandle);
         
         % Wait for button press
