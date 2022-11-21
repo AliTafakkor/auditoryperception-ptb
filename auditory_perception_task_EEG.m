@@ -413,11 +413,10 @@ try
     
 catch
     % Save exp and run information
-    %save(save_file_name, 'exp', 'run');
-    % Error handling: Close all p.whandledows and movies, release all ressources.
+    save(save_file_name, 'exp');
+    % Error handling: Close all p.whandledows and audioport, release all ressources.
     PsychPortAudio('Close', p.pahandle);
     sca;
-    rethrow(lasterror);
-    
+    rethrow(lasterror);  
 end
 
