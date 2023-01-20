@@ -1,7 +1,7 @@
 sca;
 clear;clc;
 
-addpath('Functions');
+addpath('utils');
 
 % Skip synchronization checks
 Screen('Preference', 'SkipSyncTests', 1);
@@ -33,7 +33,8 @@ p.pressKey = KbName('b');
 
 % Load audio device
 InitializePsychSound;
-p.pahandle = PsychPortAudio('Open', [], [], 0, 48000, 2);
+p.pahandle = PsychPortAudio('Open', getSoundCardID(), [], 0, 48000, 2);
+%PsychPortAudio('Volume', p.pahandle, 0.03);
 
 
 % Load silent audio to buffer
@@ -70,7 +71,7 @@ exp.stim = audio;
 
 % Save experiment information
 exp.date = nowstring;
-save_path = fullfile('..', 'results', exp.subjID);
+save_path = fullfile('..', 'results', 'fMRI', exp.subjID);
 mkdir(save_path);
 save_file_name = [save_path filesep exp.name '_auditory__perception_task_fMRI_run_' exp.subjID '_' exp.date '.mat'];
 exp.task = 'Perception';
@@ -89,7 +90,13 @@ try
     Screen('Blendfunction', p.whandle, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     HideCursor(p.whandle);
     
+
     % Paramters for fixation cross
+    p.xCenter = floor(p.wRect(3)/2);
+    p.yCenter = floor(p.wRect(4)/2);
+    p.hpad = p.wRect(3)*0.05;
+    p.vpad = p.wRect(4)*0.05;
+    p.margin = p.wRect(4)*0.025;
     p.xCenter = p.wRect(3)/2;
     p.yCenter = p.wRect(4)/2;
     fixlinelength = 10;
@@ -100,23 +107,23 @@ try
     
     
     % Load optseq sequences (each paradigm file is a run)
-    parfilename = fullfile('./optseq/perception',['perception-' sprintf('%3.3d',exp.runNumber) '.par']);
+    parfilename = fullfile('.', 'optseq', sprintf('perception-%3.3d.par',exp.runNumber));
     optseq_original = read_optseq_paradigm(parfilename);
     
-    % Assign random (but unique) videos to event categories
-    animals = [1:20];
-    people = [21:40];
-    objects = [41:60];
-    scenes = [61:80];
+    % Assign random (but unique) sounds to event categories
+    animals = 1:20;
+    people = 21:40;
+    objects = 41:60;
+    scenes = 61:80;
     
     
-    %rng('shuffle') ;
-    optseq_original.videoID = zeros(size(optseq_original.eventID));
-    optseq_original.videoID(optseq_original.eventID==1) = animals(randperm(20,20));
-    optseq_original.videoID(optseq_original.eventID==2) = people(randperm(20,20));
-    optseq_original.videoID(optseq_original.eventID==3) = objects(randperm(20,20));
-    optseq_original.videoID(optseq_original.eventID==4) = scenes(randperm(20,20));
-    optseq_original.videoID(optseq_original.eventID==5) = 81; % oddball
+    rng('shuffle') ;
+    optseq_original.audioID = zeros(size(optseq_original.eventID));
+    optseq_original.audioID(optseq_original.eventID==1) = animals(randperm(20,20));
+    optseq_original.audioID(optseq_original.eventID==2) = people(randperm(20,20));
+    optseq_original.audioID(optseq_original.eventID==3) = objects(randperm(20,20));
+    optseq_original.audioID(optseq_original.eventID==4) = scenes(randperm(20,20));
+    optseq_original.audioID(optseq_original.eventID==5) = 81; % oddball
     
     % Add NULL in optseq to each trial
     optseq.ntp = optseq_original.ntp / 2;
@@ -125,7 +132,7 @@ try
         optseq.eventID(k) = optseq_original.eventID(2*k - 1);
         optseq.eventduration(k) = optseq_original.eventduration(2*k - 1) + optseq_original.eventduration(2*k);
         optseq.eventlabel(k) = optseq_original.eventlabel(2*k - 1);
-        optseq.videoID(k) = optseq_original.videoID(2*k - 1);
+        optseq.audioID(k) = optseq_original.audioID(2*k - 1);
     end
     
 
@@ -148,9 +155,9 @@ try
     
     for i = 1:optseq.ntp %trial number
         
-        explog(i).eventID = optseq.eventID(i);
+        explog(i).eventID = optseq.audioID(i);
         explog(i).eventLabel = char(optseq.eventlabel(i));
-        explog(i).videoID = optseq.videoID(i);
+        explog(i).audioID = optseq.audioID(i);
         explog(i).response = NaN;
         
 
@@ -158,10 +165,9 @@ try
                 
             case 5 % oddball
                 
-                moviename = [pwd oddball(2:end)];
-                audioname = [pwd oddball_sound(2:end)];
-                explog(i).videoName = oddball;
-                explog(i).videoNameShort = 'oddball';
+                audioname = audio(81).name;
+                explog(i).audioName = audioname;
+                explog(i).audioNameShort = 'oddball';
                 explog(i).eventDuration = optseq.eventduration(i);
                 
                 event_start_time = optseq.time(i) + 1;

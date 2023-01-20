@@ -1,0 +1,13 @@
+optseq2 --ntp 350\
+        --tr 1\
+        --psdwin 0 15\
+        --ev animals 1 20\
+	--ev people 1 20\
+        --ev objects 1 20\
+        --ev scenes 1 20\
+        --ev oddball 1 10\
+        --tnullmin 2\
+        --tnullmax 6\
+        --nkeep 14\
+        --o perception\
+        --nsearch 100000
