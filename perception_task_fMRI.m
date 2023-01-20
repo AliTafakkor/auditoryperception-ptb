@@ -73,7 +73,7 @@ exp.stim = audio;
 exp.date = nowstring;
 save_path = fullfile('..', 'results', 'fMRI', exp.subjID);
 mkdir(save_path);
-save_file_name = [save_path filesep exp.name '_auditory__perception_task_fMRI_run_' exp.subjID '_' exp.date '.mat'];
+save_file_name = fullfile(save_path, sprintf('fMRI_task_%s_run_%02d_sub_%s_%s.mat', exp.name, exp.runNumber, exp.subjID, exp.date));
 exp.task = 'Perception';
 
 rng('default');
