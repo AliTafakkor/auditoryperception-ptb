@@ -1,10 +1,10 @@
-sca; clearvars -except subjectID;
+sca; clearvars -except subjectID;  
 
 % Add path to utility functions   
 addpath('utils');
 
 % Skip synchronization checks (to test)
-
+  
  Screen('Preference', 'SkipSyncTests', 1);
  
 AssertOpenGL;
@@ -17,7 +17,7 @@ WaitSecs(0.1);
 
 % Set parameters
 p.text_size = 30;
-p.text_font = 'Arial';
+p.text_font = 'Ari al';
 
 % Set experimental infotmation
 exp.name = 'Stimuli_Familiarization';
