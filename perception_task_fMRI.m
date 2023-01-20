@@ -139,8 +139,9 @@ try
     exp.optseq = optseq;
     
     % Instruction text
-    str = 'Video Detection Task';
-    Screen('DrawText', p.whandle, str, p.xCenter-400, p.yCenter-50, [0 0 0]);
+    str = 'fMRI Perception Task';
+    drawAlignedText(p, str, p.yCenter, 0, 'c', 'c')
+    %Screen('DrawText', p.whandle, str, p.xCenter-400, p.yCenter-50, [0 0 0]);
     Screen('Flip', p.whandle);
     
     % Wait for fMRI trigger
@@ -172,7 +173,8 @@ try
                 
                 event_start_time = optseq.time(i) + 1;
                 explog(i).optseqStartTime = event_start_time;
-                [response, onset] = video_audio_display(p,moviename,audioname,start, event_start_time);
+                [response, onset] = only_audio_display_fMRI(p, audioname, start, event_start_time);
+                %[response, onset] = video_audio_display(p,moviename,audioname,start, event_start_time);
                 
                 explog(i).eventOnset = onset;
                 explog(i).response = response;
@@ -188,30 +190,19 @@ try
 %                     end
 %                 end
      
-            otherwise % videos
+            otherwise % stimuli
                 
-                explog(i).videoName = videos(optseq.videoID(i)).videoName;
-                explog(i).videoNameShort = videos(optseq.videoID(i)).videoNameShort;
+                audioname = audio(optseq.audioID(i)).name;
+                explog(i).audioName = audioname;
                 explog(i).eventDuration = optseq.eventduration(i);
-                
-                audioname = [pwd audio(optseq.videoID(i)).videoName(2:end)];
-                moviename = [pwd explog(i).videoName(2:end)];
                 
                 event_start_time = optseq.time(i) + 1;
                 explog(i).optseqStartTime = event_start_time;
-                [response, onset] = video_audio_display(p,moviename,audioname,start, event_start_time);
+                [response, onset] = only_audio_display_fMRI(p, audioname, start, event_start_time);
 
-                
                 explog(i).eventOnset = onset;
                 explog(i).response = response;
-
-
                 
-%                 Screen('DrawLines',p.whandle,p.fixcross,p.fixwidth,p.fixcolor);
-%                 Screen('Flip', p.whandle);
-%                 WaitSecs(explog(i).eventduration - 1);
-                
-
         end
     end
     

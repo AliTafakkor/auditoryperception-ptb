@@ -1,16 +1,17 @@
-function [response, loadtime, wholetime] = only_audio_display(p,audioname)
+function [response, onset] = only_audio_display_fMRI(p, audioname, start, event_start_time)
 % Display video giving the file name
     response = NaN;
     
-    tic;
-    
-    
     sound_load(audioname,p.pahandle);
 
-    loadtime = toc;
-    
+    while GetSecs < start+event_start_time
+        
+    end
+
+    onset = GetSecs - start;
     sound_play(p.pahandle);
     
+    tic;
     while toc < 1
         
         [keyIsDown, ~, keyCode] = KbCheck(-1);
@@ -24,10 +25,6 @@ function [response, loadtime, wholetime] = only_audio_display(p,audioname)
         Screen('DrawLines',p.whandle,p.fixcross,p.fixwidth,p.fixcolor);
         Screen('Flip', p.whandle);
     end
-
-    wholetime = toc; %GetSecs - loadstart;
-
-    
 
 
 end
