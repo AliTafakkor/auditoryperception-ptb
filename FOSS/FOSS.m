@@ -182,7 +182,7 @@ targetRect = CenterRectOnPoint([0 0 exp.imageDisplaySizePx exp.imageDisplaySizeP
 % save the .mat file with all the planned presentations
 %-------------------------------------------------------------------------
 savePath = fullfile(save_root, 'DataFiles', SID);
-mkdir(pwd, savePath);
+mkdir(savePath);
 save(fullfile(savePath, [SID '_Run' int2str(runNum) '_' datestr(now, 30) '.mat']), 'exp', 'D');
 
 % Save the PRT file

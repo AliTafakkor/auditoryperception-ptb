@@ -17,7 +17,7 @@ WaitSecs(0.1);
 
 % Set parameters
 p.text_size = 30;
-p.text_font = 'Ari al';
+p.text_font = 'Arial';
 
 % Set experimental infotmation
 exp.name = 'Stimuli_Familiarization';
